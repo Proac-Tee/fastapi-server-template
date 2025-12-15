@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 import pytest
 from sqlalchemy.orm import Session
 
@@ -24,7 +22,7 @@ class TestUserServive:
         assert user.email == test_user.email
 
         with pytest.raises(UserNotFoundError):
-            user_service.get_user_by_id(db_session, uuid4())
+            user_service.get_user_by_id(db_session, 2)
 
     def test_change_password(self, db_session: Session, test_user: User):
         db_session.add(test_user)

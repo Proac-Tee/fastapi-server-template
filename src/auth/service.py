@@ -1,7 +1,6 @@
 import logging
 from datetime import datetime, timedelta, timezone
 from typing import Annotated
-from uuid import UUID, uuid4
 
 import jwt
 from fastapi import Depends
@@ -46,7 +45,7 @@ def authenticate_user(email: str, password: str, db: Session) -> User | None:
     return user
 
 
-def create_access_token(email: str, user_id: UUID, expires_delta: timedelta) -> str:
+def create_access_token(email: str, user_id: int, expires_delta: timedelta) -> str:
     encode = {
         "sub": email,
         "id": str(user_id),
@@ -79,7 +78,6 @@ def register_user(
     """
     try:
         new_user = User(
-            id=uuid4(),
             email=register_user_request.email,
             first_name=register_user_request.first_name,
             last_name=register_user_request.last_name,

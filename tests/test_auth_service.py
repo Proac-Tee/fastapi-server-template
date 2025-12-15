@@ -1,5 +1,4 @@
 from datetime import timedelta
-from uuid import uuid4
 
 import pytest
 from fastapi.security import OAuth2PasswordRequestForm
@@ -73,7 +72,7 @@ class TestAuthService:
         assert user.image_url == "image.url"
 
     def test_create_and_verify_token(self, db_session):
-        user_id = uuid4()
+        user_id = 1
         email = "text@example.com"
 
         access_token_expires = timedelta(minutes=30)

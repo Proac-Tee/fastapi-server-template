@@ -1,6 +1,3 @@
-from logging import disable
-from uuid import uuid4
-
 import pytest
 from fastapi import status
 from fastapi.testclient import TestClient
@@ -35,7 +32,6 @@ def db_session():
 @pytest.fixture(scope="function")
 def test_user():
     return User(
-        id=uuid4(),
         email="test@test.com",
         first_name="Test",
         last_name="User",
@@ -46,7 +42,7 @@ def test_user():
 
 @pytest.fixture(scope="function")
 def test_token_data():
-    return TokenData(user_id=str(uuid4()))
+    return TokenData(user_id=int(1))
 
 
 @pytest.fixture(scope="function")
@@ -76,7 +72,7 @@ def client(db_session):
 def auth_headers(client: TestClient, db_session):
     # Register a test user
     response = client.post(
-        "/auth/",
+        "/api/v1/auth/",
         json={
             "email": "test@test.com",
             "password": "Testpassword124",
@@ -89,7 +85,7 @@ def auth_headers(client: TestClient, db_session):
 
     # Login to get access token
     response = client.post(
-        "/auth/token",
+        "/api/v1/auth/token",
         data={
             "username": "test@test.com",
             "password": "Testpassword124",

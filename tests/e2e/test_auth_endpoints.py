@@ -14,12 +14,12 @@ class TestAuthEndpoints:
             image_url="imagel.url",
         )
 
-        response = client.post("/auth/", json=register_data.model_dump())
+        response = client.post("/api/v1/auth/", json=register_data.model_dump())
         assert response.status_code == status.HTTP_201_CREATED
 
         # Test successful login
         login_response = client.post(
-            "/auth/token",
+            "/api/v1/auth/token",
             data={
                 "username": register_data.email,
                 "password": register_data.password,
@@ -35,7 +35,7 @@ class TestAuthEndpoints:
     def test_login_failures(self, client: TestClient):
         # Test login with non-existent user
         response = client.post(
-            "/auth/token",
+            "/api/v1/auth/token",
             data={
                 "username": "nonexistent@example.com",
                 "password": "wrongpassword",
@@ -47,7 +47,7 @@ class TestAuthEndpoints:
 
         # Test login with wrong password
         response = client.post(
-            "/auth/token",
+            "/api/v1/auth/token",
             data={
                 "username": "test.user@example.com",
                 "password": "wrongpassword",
@@ -61,7 +61,7 @@ class TestAuthEndpoints:
         # Test rate limiting on registration
         for _ in range(5):  # Attempt 4 registrations (limit is 5/hour)
             response = client.post(
-                "/auth/",
+                "/api/v1/auth/",
                 json={
                     "email": f"test{_}@example.com",
                     "password": "testpassword123",
@@ -73,7 +73,7 @@ class TestAuthEndpoints:
 
         # Attemp the 5th registration which exceeds the limit
         response = client.post(
-            "/auth/",
+            "/api/v1/auth/",
             json={
                 "email": "test5@example.com",
                 "password": "testpassword123",

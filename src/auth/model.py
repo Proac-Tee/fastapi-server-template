@@ -1,5 +1,3 @@
-from uuid import UUID
-
 from pydantic import BaseModel, EmailStr
 
 
@@ -18,9 +16,9 @@ class Token(BaseModel):
 
 
 class TokenData(BaseModel):
-    user_id: str | None = None
+    user_id: int | None = None
 
-    def get_user_id(self) -> UUID | None:
+    def get_user_id(self) -> int | None:
         if self.user_id:
-            return UUID(self.user_id)
+            return int(self.user_id)
         return None

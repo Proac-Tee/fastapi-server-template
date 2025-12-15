@@ -1,7 +1,7 @@
 import logging
-from uuid import UUID
 
 from sqlalchemy.orm import Session
+
 from src.auth.service import get_password_hash, verify_password
 from src.entities.user import User
 from src.exceptions import (
@@ -12,7 +12,7 @@ from src.exceptions import (
 from src.users import model
 
 
-def get_user_by_id(db: Session, user_id: UUID) -> User:
+def get_user_by_id(db: Session, user_id: int) -> User:
     user = db.query(User).filter(User.id == user_id).first()
     if not user:
         logging.warning(f"User not found with ID: {user_id}")
@@ -22,7 +22,7 @@ def get_user_by_id(db: Session, user_id: UUID) -> User:
 
 
 def change_password(
-    db: Session, user_id: UUID, password_change: model.PasswordChange
+    db: Session, user_id: int, password_change: model.PasswordChange
 ) -> None:
     try:
         user = get_user_by_id(db, user_id)

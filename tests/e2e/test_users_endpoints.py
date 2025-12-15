@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 
 class TestUsersEndpoint:
     def test_get_current_user(self, client: TestClient, auth_headers):
-        response = client.get("/users/me", headers=auth_headers)
+        response = client.get("/api/v1/users/me", headers=auth_headers)
         assert response.status_code == status.HTTP_200_OK
         user_data = response.json()
         assert "email" in user_data
@@ -17,7 +17,7 @@ class TestUsersEndpoint:
     def test_change_password(self, client: TestClient, auth_headers):
         # Change password
         response = client.put(
-            "/users/change-password",
+            "/api/v1/users/change-password",
             headers=auth_headers,
             json={
                 "current_password": "Testpassword124",
@@ -30,7 +30,7 @@ class TestUsersEndpoint:
 
         # Try logging in with new password
         login_response = client.post(
-            "/auth/token",
+            "/api/v1/auth/token",
             data={
                 "username": "test@test.com",
                 "password": "newpassword123",
@@ -42,7 +42,7 @@ class TestUsersEndpoint:
     def test_password_change_validation(self, client: TestClient, auth_headers):
         # Test wrong current password
         response = client.put(
-            "/users/change-password",
+            "/api/v1/users/change-password",
             headers=auth_headers,
             json={
                 "current_password": "wrongpassword",
@@ -55,7 +55,7 @@ class TestUsersEndpoint:
 
         # Test password mismatch
         response = client.put(
-            "/users/change-password",
+            "/api/v1/users/change-password",
             headers=auth_headers,
             json={
                 "current_password": "Testpassword124",
@@ -68,12 +68,12 @@ class TestUsersEndpoint:
 
     def test_user_endpoints_authorization(self, client: TestClient):
         # Try accessing user endpoints without auth
-        response = client.get("/users/me")
+        response = client.get("/api/v1/users/me")
 
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
         response = client.put(
-            "/users/change-password",
+            "/api/v1/users/change-password",
             json={
                 "current_password": "testpassword123",
                 "new_password": "newpassword123",
