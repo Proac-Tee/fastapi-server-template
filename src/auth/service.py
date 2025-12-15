@@ -12,7 +12,7 @@ from sqlalchemy.orm.session import Session
 
 from src.database.core import get_db
 from src.entities.user import User
-from src.exceptions import AuthenticationError, InactiveUserError
+from src.exceptions import AuthenticationError
 from src.settings import settings
 
 from . import model
